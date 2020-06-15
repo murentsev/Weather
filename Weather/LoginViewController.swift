@@ -8,15 +8,12 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class LoginViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var loginTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBAction func signinPressed(_ sender: UIButton) {
-        guard let login = loginTextField.text, let password = passwordTextField.text else { return }
-        print("login: \(login) Password: \(password)")
-    }
+ 
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +46,33 @@ class ViewController: UIViewController {
     
     @IBAction func scrollTapped(_ gesture: UIGestureRecognizer) {
         scrollView.endEditing(true)
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "Home" {
+           let isValid = checkUserData()
+            if !isValid {
+                showErrorAlert()
+            }
+            return isValid
+        }
+        return true
+    }
+    
+    func checkUserData() -> Bool {
+        return loginTextField.text == "admin" &&
+        passwordTextField.text == "123"
+    }
+    
+    func showErrorAlert() {
+        let alert = UIAlertController(
+            title: "Error",
+            message: "invalid login or password",
+            preferredStyle: .alert
+        )
+        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
     }
 }
 
